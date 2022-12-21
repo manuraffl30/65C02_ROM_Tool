@@ -1,12 +1,25 @@
 from dictionary import *
 
-rom = bytearray([] * 256) # 0xea is the opcode for "NOP" (6502)
-rom[0] = 0xa9 # 0xa9 is opcode for LDA (load accu with memory)
-rom[1] = 0x42 # 0x42 is the value which should be loaded into the accu
-rom[2] = 0x8d # 0x8d is the opcode for STA (store accu in memory)
-rom[3] = 0x00
-rom[4] = 0x60 # accu content should be stored at address $6000
-rom[0xfc] = 0x00 #
-rom[0xfd] = 0xFF # set program start address to $FF00 (after RESET)
-with open("rom3.bin", "wb") as out_file:
-out_file.write(rom);
+rom = bytearray([cmd_IMPLIED["NOP"][0]] * 256)
+
+rom[0xFC] = 0x00 #
+rom[0xFD] = 0xFF # set program start address to $FF00 (after RESET)
+
+
+#------------------------------
+rom[0] = cmd_IMMEDIATE["LDA"][0]
+rom[1] = 0x42 
+#LDA #$42
+#------------------------------
+rom[2] = cmd_ABSOLUTE["ASL"][0]
+#Shift Left
+#------------------------------
+rom[3] = cmd_ABSOLUTE["STA"][0]
+rom[4] = 0x00
+rom[5] = 0x60 
+#STA $6000
+#------------------------------
+
+
+with open("rom.bin", "wb") as out_file:
+    out_file.write(rom);
